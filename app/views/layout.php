@@ -21,7 +21,22 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link "  href="index.php?page=users">Users</a>
+          <a class="nav-link " href="index.php?page=users">Users</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="index.php?page=roles">All Roles</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="index.php?page=roles&action=create">Create Role</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="index.php?page=register">Register</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="index.php?page=login">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="index.php?page=logout">Logout</a>
         </li>
       </ul>
     </div>

@@ -1,7 +1,8 @@
 <?php 
 require_once 'app/models/User.php';
-class UsersController{
 
+class UsersController{
+ 
     public function index(){
   $userModel = new User();
   $users=$userModel->readAll();
@@ -17,12 +18,18 @@ class UsersController{
 
 
     public function store(){
+     
       // Database::tte($_POST);
-if(isset($_POST['login'])&&isset($_POST['password'])
- &&isset($_POST['confirm_password'])&&isset($_POST['is_admin'])){
+if(isset($_POST['username'])&&isset($_POST['password'])
+ &&isset($_POST['confirm_password'])&&isset($_POST['email'])){
   // Database::tte($_POST);
-$password=$_POST['password'];
-$confirm_password=$_POST['confirm_password'];
+
+$username= trim($_POST['username']);
+$email= trim($_POST['email']);
+$password=trim($_POST['password']);
+$confirm_password=trim($_POST['confirm_password']);
+
+// $role= 1;
 
 if($password!==$confirm_password){
   echo "Password do not match!!!";
@@ -30,7 +37,15 @@ if($password!==$confirm_password){
 }else{
 
 $userModel = new User();
-$userModel->create($_POST);
+$config =require __DIR__.'/../../../config.php';
+$data=[
+'username'=>$username,
+'email'=> $email,
+'password'=>$password,
+'role'=> $config['start_role']
+];
+
+$userModel->create($data);
 }
 header("Location: index.php?page=users");
 }
@@ -40,6 +55,9 @@ header("Location: index.php?page=users");
       $userModel = new User();
       $user=$userModel->read($_GET['id']);
       
+      $roleModel = new Role();
+      $roles=$roleModel->getAllRoles();
+
       include 'app/views/users/edit.php';
     }
     public function update(){

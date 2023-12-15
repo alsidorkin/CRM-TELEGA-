@@ -1,10 +1,13 @@
 <?php 
-$title ='Create user';
+$title ='Register';
 ob_start();
 ?>
-<h1>Create user</h1>
 
-<form action="index.php?page=users&action=store" method="post">
+<div class="row justify-content-center mt-5">
+<div class="col-lg-6 col-md-8 col-sm-10">
+<h1 class="text-center mb-4" >Register</h1>
+
+<form action="index.php?page=auth&action=store" method="post">
     <div class="mb-3">
         <label for="username">Username</label>
         <input type="text" class="form-control" id="username" name="username" required>
@@ -21,16 +24,13 @@ ob_start();
         <label for="confirm_password">Confirm Password</label>
         <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
     </div>
-    <!-- <div class="mb-3">
-        <label for="admin">Admin</label>
-        <select name="is_admin" class="form-control" id="admin">
-            <option value="0">No</option>
-            <option value="1">Yes</option>
-        </select>
-    </div> -->
-    <button type="submit" class="btn btn-primary">Create</button>
+    <button type="submit" class="btn btn-primary">Register</button>
 </form>
-
+<div class="mt-4" >
+    <p>Alredy have an account?<a href="index.php?page=login">Login here</a></p>
+</div>
+</div>
+</div>
 
 <?php $content=ob_get_clean();
 include 'app/views/layout.php'; ?>
