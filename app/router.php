@@ -87,6 +87,43 @@ class Router{
                           break;
 
 
+                          case 'pages':
+                            $controller = new PageController();
+                            
+                                  if(isset($_GET['action'])){
+                    
+                                    switch($_GET['action']){
+                         
+                                  case 'create':
+                                    $controller->create();
+                                    break;
+                    
+                                  case 'store':
+                                    // Database::tte($_POST);
+                                    $controller->store();
+                                    break;
+                    
+                                  case 'edit':
+                                    // Database::tte($_POST);
+                                    $controller->edit($_GET['id']);
+                                    break;
+                                  case 'update':
+                                    // Database::tte($_POST);
+                                    $controller->update();
+                                    break;
+                                  case 'delete':
+                                    // Database::tte($_POST);
+                                    $controller->delete();
+                                    break;
+                                }
+                    
+                            }else{
+                              $controller->index();
+                            }
+                    
+                                    break;
+
+
         case 'register': 
           $controller = new AuthController();
           $controller->register();
