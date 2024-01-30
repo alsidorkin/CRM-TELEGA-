@@ -1,9 +1,20 @@
 <?php 
-require_once 'app/models/roles/Role.php';
-class RoleController{
+// require_once 'app/models/roles/Role.php';
 
+ namespace controllers\roles;
+
+ use models\roles\Role;
+ use models\Check;
+class RoleController{
+  private $check;
+
+  public function __construct(){
+    $userRole=isset($_SESSION['user_role'] ) ? $_SESSION['user_role'] : null;
+    $this->check=new Check($userRole); 
+  }
     public function index(){
-  $roleModel = new Role();
+       $this->check->requirePermission(); 
+  $roleModel = new Role(); 
   $roles=$roleModel->getAllRoles();
   // Database::tte($roles);
   include 'app/views/roles/index.php';
@@ -11,13 +22,13 @@ class RoleController{
 
     
     public function create(){
-
+       $this->check->requirePermission(); 
   include 'app/views/roles/create.php';
     }
 
 
     public function store(){
-     
+       $this->check->requirePermission(); 
       // Database::tte($_POST);
 if(isset($_POST['role_name'])&&isset($_POST['role_description'])){
   // Database::tte($_POST);
@@ -33,11 +44,14 @@ $roleModel = new Role();
 // Database::tte($role_name.$role_description);
 $roleModel->createRole($role_name,$role_description);
 }
-header("Location: index.php?page=roles");
+$path='/'.APP_BASE_PATH.'/roles';
+header("Location: $path");
 }
     }
 
-    public function edit($id){
+    public function edit($params){
+       $this->check->requirePermission(); 
+      $id=$params['id'];
       $roleModel = new Role();
       $role=$roleModel->getRoleById($id);
       // Database::tte($role);
@@ -51,8 +65,10 @@ header("Location: index.php?page=roles");
 
 
     public function update(){
+      $this->check->requirePermission(); 
+
      if(isset($_POST['id'])&&isset($_POST['role_name'])&&isset($_POST['role_description'])){
-  // Database::tte($_POST);
+
 $id= trim($_POST['id']);
 $role_name= trim($_POST['role_name']);
 $role_description= trim($_POST['role_description']);
@@ -63,18 +79,21 @@ if(empty($role_name)){
 }else{
 
 $roleModel = new Role();
-// Database::tte($id.$role_name.$role_description);
+
 $roleModel->updateRole($id,$role_name,$role_description);
 }
-header("Location: index.php?page=roles");
+$path='/'.APP_BASE_PATH.'/roles';
+header("Location: $path");
 }
     }
 
     
-    public function delete(){
+    public function delete($params){
+      $this->check->requirePermission(); 
       $roleModel = new Role();
-      $roleModel->deleteRole($_GET['id']);
-       header("Location: index.php?page=roles");
+      $roleModel->deleteRole($params['id']);
+      $path='/'.APP_BASE_PATH.'/roles';
+      header("Location: $path");
     }
 
 }

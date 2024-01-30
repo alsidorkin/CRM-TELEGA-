@@ -6,7 +6,7 @@ ob_start();
 <div class="col-lg-6 col-md-8 col-sm-10">
 <h1>Create Role</h1>
 
-<form action="index.php?page=roles&action=store" method="post">
+<form action="/<?=APP_BASE_PATH?>/roles/store" method="post">
     <div class="mb-3">
         <label for="role_name" class="form-label">Role name</label>
         <input type="text" class="form-control" id="role_name" name="role_name" required>

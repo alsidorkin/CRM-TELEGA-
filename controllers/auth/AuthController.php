@@ -1,11 +1,13 @@
 <?php 
-require_once 'app/models/AuthUser.php';
+//  require_once 'app/models/AuthUser.php';
+namespace controllers\auth;
 
+use models\AuthUser;
 class AuthController{
 
     public function register(){
 
-  include 'app/views/users/register.php';
+  include 'app/views/auth/register.php';
     }
 
     public function store(){
@@ -35,12 +37,13 @@ $userModel->register($username,$email,$password);
 
 // Database::tte($_POST['password'].' :'.$password);
 }
-header("Location: index.php?page=login");
+$path= '/'.APP_BASE_PATH.'/auth/login';
+header("Location: $path");
     }
 
     public function login(){
       
-      include 'app/views/users/login.php';
+      include 'app/views/auth/login.php';
     }
 
 
@@ -62,6 +65,7 @@ header("Location: index.php?page=login");
     session_start();
     $_SESSION['user_id'] = $user['id'];
     $_SESSION['user_role']= $user['role'];
+    $_SESSION['user_name']= $user['username'];
 
      if($remember=='on'){
 
@@ -69,7 +73,8 @@ header("Location: index.php?page=login");
         setcookie('user_password' ,$password, time() + (7*24*60*60),'/');
      }
 
-    header("Location: index.php");
+     $path= '/'.APP_BASE_PATH.'/';
+     header("Location: $path");
    }else{
     echo "Invalid email or password!!!";
    }
@@ -79,7 +84,9 @@ header("Location: index.php?page=login");
         session_start();
         session_unset();
         session_destroy();
-       header("Location: index.php");
+
+       $path= '/'.APP_BASE_PATH;
+       header("Location: $path");
     }
 
 }

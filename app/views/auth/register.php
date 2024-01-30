@@ -7,7 +7,7 @@ ob_start();
 <div class="col-lg-6 col-md-8 col-sm-10">
 <h1 class="text-center mb-4" >Register</h1>
 
-<form action="index.php?page=auth&action=store" method="post">
+<form action="/<?=APP_BASE_PATH?>/auth/store" method="post">
     <div class="mb-3">
         <label for="username">Username</label>
         <input type="text" class="form-control" id="username" name="username" required>

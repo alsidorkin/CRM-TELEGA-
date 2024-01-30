@@ -1,5 +1,9 @@
 <?php  
 
+namespace models\roles;
+
+use models\Database;
+
 class Role{
 
     private $db;
@@ -8,7 +12,7 @@ class Role{
         $this->db=Database::getInstance()->getConnection();
         try{
         $result=$this->db->query("SELECT 1 FROM `roles` LIMIT 1");    
-        }catch(PDOException $e){
+        }catch(\PDOException $e){
         $this->createTable();
         }
     }
@@ -24,7 +28,7 @@ $roleTableQuery="CREATE TABLE IF NOT EXISTS `roles` (
 try{
    $this->db->exec($roleTableQuery);
     return true;
-   }catch(PDOException $e){
+   }catch(\PDOException $e){
     return false;
    }
 
@@ -35,13 +39,12 @@ public function getAllRoles(){
     try{
    $stmt=$this->db-> prepare( $query);
    $stmt->execute();
-   $roles=$stmt->fetchAll(PDO::FETCH_ASSOC);
+   $roles=$stmt->fetchAll(\PDO::FETCH_ASSOC);
 //    Database::tte($roles);
     return $roles;
-}catch(PDOException $e){
+}catch(\PDOException $e){
     return false;
    };
-//    Database::tte( $stmt);
 }
 
 public function getRoleById($id){
@@ -50,9 +53,9 @@ public function getRoleById($id){
     try{
         $stmt=$this->db->prepare($query);
         $stmt->execute([$id]);
-        $role= $stmt->fetch(PDO::FETCH_ASSOC);
+        $role= $stmt->fetch(\PDO::FETCH_ASSOC);
         return $role ? $role : false;
-       }catch(PDOException $e){
+       }catch(\PDOException $e){
         return false;
        }
 }
@@ -65,7 +68,7 @@ public function getRoleById($id){
      $stmt=$this->db->prepare($query);
      $stmt->execute([$role_name,$role_description]);
         return true;
-    }catch(PDOException $e){
+    }catch(\PDOException $e){
         return false;
        }
     //    Database::tte( $stmt);
@@ -73,15 +76,14 @@ public function getRoleById($id){
 
 
     public function updateRole($id,$role_name,$role_description){
-        // Database::tte("updateRole".$id.$role_name.$role_description);
   $query="UPDATE `roles` SET `role_name` = ?, `role_description` = ? WHERE `id` = ? ";
-//   Database::tte($query);
+
   try{
     $stmt=$this->db->prepare($query);
     $stmt->execute([$role_name,$role_description,$id]);
     // Database::tte( $user);
     return true;
-   }catch(PDOException $e){
+   }catch(\PDOException $e){
     return false;
    }
         }
@@ -96,7 +98,7 @@ public function getRoleById($id){
     $stmt->execute([$id]);
     // Database::tte( $user);
     return true;
-   }catch(PDOException $e){
+   }catch(\PDOException $e){
     return false;
    }
       }

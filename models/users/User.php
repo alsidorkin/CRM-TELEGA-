@@ -1,14 +1,16 @@
 <?php 
+namespace models\users;
 
+use models\Database;
 class User{
 
-    private $db;
+    private $db; 
 
     public function __construct(){
         $this->db=Database::getInstance()->getConnection();
         try{
         $result=$this->db->query("SELECT 1 FROM `users` LIMIT 1");    
-        }catch(PDOException $e){
+        }catch(\PDOException $e){
         $this->createTable();
         }
     }
@@ -40,7 +42,7 @@ try{
    $this->db->exec($roleTableQuery);
    $this->db->exec($userTableQuery);
     return true;
-   }catch(PDOException $e){
+   }catch(\PDOException $e){
     return false;
    }
 
@@ -53,26 +55,32 @@ $stmt=$this->db-> query("SELECT * FROM  `users`");
 
         $users=[];
 
-        while($row=$stmt->fetch(PDO::FETCH_ASSOC)){
+        while($row=$stmt->fetch(\PDO::FETCH_ASSOC)){
             $users[]=$row;
         }
         return $users;
-    }catch(PDOException $e){
+    }catch(\PDOException $e){
         return false;
        };
     //    Database::tte( $stmt);
     }
 
     public function create($data){
-        //  Database::tte( $data);
+        //   Database::tte( $data); 
         $username=$data['username'];
         $email=$data['email'];
         $password=password_hash($data['password'], PASSWORD_DEFAULT);
         $role=$data['role'];
        $created_at=date('Y-m-d H:i:s');
     //    Database::tte($_POST['password'].' :'.$password);
+
        $query=" INSERT INTO users (username,email,password,role,created_at) VALUES (?,?,?,?,?)";
-       
+      
+    // $query = "INSERT INTO users (username, email, password, role, created_at) 
+    // VALUES ('$username', '$email', '$password', '$role', '$created_at')";
+    // $this->db->exec($query);
+
+
       try{
        
         $stmt=$this->db->prepare($query);
@@ -81,11 +89,11 @@ $stmt=$this->db-> query("SELECT * FROM  `users`");
         //  Database::tte( $stmt);
         echo "Query executed successfully!\n";
         return true;
-      }catch(PDOException $e){
+      }catch(\PDOException $e){
         return false;
        } 
     }
-
+    
 
     public function update($id, $data){
 
@@ -102,7 +110,7 @@ $stmt=$this->db-> query("SELECT * FROM  `users`");
     $stmt=$this->db->prepare($query);
     $stmt->execute([$username, $email, $admin,$role,$is_active,$id]);
     return true;
-   }catch(PDOException $e){
+   }catch(\PDOException $e){
     return false;
    }
         }
@@ -118,7 +126,7 @@ $stmt=$this->db-> query("SELECT * FROM  `users`");
             $stmt->execute([$id]);
             $res= $stmt->fetch();
             return $res;
-           }catch(PDOException $e){
+           }catch(\PDOException $e){
             return false;
            }
     }
@@ -132,7 +140,7 @@ $stmt=$this->db-> query("SELECT * FROM  `users`");
                 $stmt=$this->db->prepare($query);
                 $stmt->execute([$id]);
                 return true;
-               }catch(PDOException $e){
+               }catch(\PDOException $e){
                 return false;
                }        
     }

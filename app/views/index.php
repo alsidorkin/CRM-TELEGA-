@@ -1,8 +1,8 @@
 <?php 
 
-if($_SERVER['REQUEST_URI'] == '/crm_for_telegram/index.php'){
+if($_SERVER['REQUEST_URI'] == '/CRM-FOR-TELEGRAM/index.php'){
 
-    header('Location: /crm_for_telegram/');
+    header('Location: /CRM-FOR-TELEGRAM/');
     exit();
 }
 $title ='User list';

@@ -1,6 +1,9 @@
-
 <?php  
 
+namespace models\pages;
+
+use models\Database;
+use models\roles\Role;
 class PageModel{
 
     private $db;
@@ -9,7 +12,7 @@ class PageModel{
         $this->db=Database::getInstance()->getConnection();
         try{
         $result=$this->db->query("SELECT 1 FROM `pages` LIMIT 1");    
-        }catch(PDOException $e){
+        }catch(\PDOException $e){
         $this->createTable();
         }
     }
@@ -19,6 +22,7 @@ $roleTableQuery="CREATE TABLE IF NOT EXISTS `pages` (
         `id` INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT ,
         `title` VARCHAR(255) NOT NULL,
         `slug` VARCHAR(255) NOT NULL,
+        `role` VARCHAR(255) NOT NULL,
         `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         ) ENGINE=innoDB DEFAULT CHARSET = utf8mb4";
@@ -27,7 +31,7 @@ $roleTableQuery="CREATE TABLE IF NOT EXISTS `pages` (
 try{
    $this->db->exec($roleTableQuery);
     return true;
-   }catch(PDOException $e){
+   }catch(\PDOException $e){
     return false;
    }
 
@@ -38,53 +42,66 @@ public function getAllPages(){
     try{
    $stmt=$this->db-> prepare( $query);
    $stmt->execute();
-   $pages=$stmt->fetchAll(PDO::FETCH_ASSOC);
+   $pages=$stmt->fetchAll(\PDO::FETCH_ASSOC);
 //    Database::tte($roles);
     return $pages;
-}catch(PDOException $e){
+}catch(\PDOException $e){
     return false;
    };
 //    Database::tte( $stmt);
 }
 
-public function getPageById($id){
+public function getPageById($params){
+    $id=$params['id'];
     $query="SELECT * FROM pages WHERE id = ?";
 
     try{
         $stmt=$this->db->prepare($query);
         $stmt->execute([$id]);
-        $page= $stmt->fetch(PDO::FETCH_ASSOC);
+        $page= $stmt->fetch(\PDO::FETCH_ASSOC);
         return $page ? $page : false;
-       }catch(PDOException $e){
+       }catch(\PDOException $e){
         return false;
        }
 }
-    public function createPage($title,$slug){
+public function findBySlug($slug){
+    $query="SELECT * FROM pages WHERE slug = ?";
+
+    try{
+        $stmt=$this->db->prepare($query);
+        $stmt->execute([$slug]);
+        $page= $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $page ? $page : false;
+       }catch(\PDOException $e){
+        return false;
+       }
+}
+    public function createPage($title,$slug,$role){
         // Database::tte("createRole".$role_name.$role_description);
 
-        $query = "INSERT INTO pages (title,slug) VALUES (?,?)";
+        $query = "INSERT INTO pages (title,slug,role) VALUES (?,?,?)";
         try{
         
      $stmt=$this->db->prepare($query);
-     $stmt->execute([$title,$slug]);
+     $stmt->execute([$title,$slug,$role]);
         return true;
-    }catch(PDOException $e){
+    }catch(\PDOException $e){
         return false;
        }
     //    Database::tte( $stmt);
     }
 
 
-    public function updatePage($id,$title,$slug){
+    public function updatePage($id,$title,$slug,$role){
         // Database::tte($id.$title.$slug);
-  $query="UPDATE `pages` SET `title` = ?, `slug` = ? WHERE `id` = ? ";
+  $query="UPDATE `pages` SET `title` = ?, `slug` = ?, `role` = ? WHERE `id` = ? ";
 //   Database::tte($query);
   try{
     $stmt=$this->db->prepare($query);
-    $stmt->execute([$title,$slug,$id]);
+    $stmt->execute([$title,$slug,$role,$id]);
     // Database::tte( $user);
     return true;
-   }catch(PDOException $e){
+   }catch(\PDOException $e){
     return false;
    }
         }
@@ -99,7 +116,7 @@ public function getPageById($id){
          $stmt->execute([$id]);
     // Database::tte( $user);
                 return true;
-            }catch(PDOException $e){
+            }catch(\PDOException $e){
                 return false;
             }
       }
