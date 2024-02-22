@@ -24,7 +24,7 @@ ob_start();
     <button type="submit" class="btn btn-primary">Login</button>
 </form>
 <div class="mt-4" >
-    <p>Alredy have an account?<a href="index.php?page=register">Register here</a></p>
+    <p>Alredy have an account?<a href="/<?=APP_BASE_PATH?>/auth/register">Register here</a></p>
 </div>
 </div>
 </div>
