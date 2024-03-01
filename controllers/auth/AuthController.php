@@ -12,12 +12,12 @@ class AuthController{
 
     public function store(){
      
-      //  Database::tte($_POST);
+      //tte($_POST);
 if(isset($_POST['username'])&&isset($_POST['password'])
  &&isset($_POST['confirm_password'])&&isset($_POST['email'])){
 
-$username=trim($_POST['username']);
-$email=trim($_POST['email']);
+$username=trim(htmlspecialchars($_POST['username']));
+$email=trim(filter_var($_POST['email'],FILTER_SANITIZE_EMAIL));
 $password=trim($_POST['password']);
 $confirm_password=trim($_POST['confirm_password']);
 // $role = 1;,$role
@@ -37,7 +37,7 @@ $userModel->register($username,$email,$password);
 
 // Database::tte($_POST['password'].' :'.$password);
 }
-$path= '/'.APP_BASE_PATH.'/auth/login';
+$path= '/auth/login';
 header("Location: $path");
     }
 
@@ -66,6 +66,7 @@ header("Location: $path");
     $_SESSION['user_id'] = $user['id'];
     $_SESSION['user_role']= $user['role'];
     $_SESSION['user_name']= $user['username'];
+    $_SESSION['user_email']= $user['email'];
 
      if($remember=='on'){
 
@@ -73,7 +74,7 @@ header("Location: $path");
         setcookie('user_password' ,$password, time() + (7*24*60*60),'/');
      }
 
-     $path= '/'.APP_BASE_PATH.'/';
+     $path= '/';
      header("Location: $path");
    }else{
     echo "Invalid email or password!!!";
@@ -85,7 +86,7 @@ header("Location: $path");
         session_unset();
         session_destroy();
 
-       $path= '/'.APP_BASE_PATH;
+       $path= '/';
        header("Location: $path");
     }
 

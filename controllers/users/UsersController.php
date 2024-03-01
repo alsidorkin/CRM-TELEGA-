@@ -29,13 +29,13 @@ class UsersController{
 
 
     public function store(){
-      $this->check->requirePermission(); 
-      // Database::tte($_POST);
+      // $this->check->requirePermission(); 
+    // tte($_POST);
 if(isset($_POST['username'])&&isset($_POST['password'])
  &&isset($_POST['confirm_password'])&&isset($_POST['email'])){
 
-$username= trim($_POST['username']); 
-$email= trim($_POST['email']);
+$username= trim(htmlspecialchars($_POST['username'])); 
+$email= trim(htmlspecialchars($_POST['email']));
 $password=trim($_POST['password']);
 $confirm_password=trim($_POST['confirm_password']);
 
@@ -53,12 +53,12 @@ $data=[
 'email'=> $email,
 'password'=>$password,
 // 'role'=> $config['start_role']
-'role'=> START_ROLE,
+'role'=> 1,
 ];
 
 $userModel->create($data);
 }
-$path='/'.APP_BASE_PATH.'/users';
+$path='/users';
 header("Location: $path");
 }
     }
@@ -79,21 +79,22 @@ header("Location: $path");
 
 
     public function update($params){
+
       $this->check->requirePermission(); 
 
       if(isset($_POST['role'])){
-        $newRole=$_POST['role'];
+        $newRole=trim(htmlspecialchars($_POST['role']));
       }
 
       if($this->check->isCurrentUserRole($newRole)){
-        $path='/'.APP_BASE_PATH.'/auth/logout';
+        $path='/auth/logout';
        header("Location: $path");
        exit;
       }
       $userModel = new User();
       $user=$userModel->update($params['id'],$_POST);
     //   if (isset($_POST['email'])) {
-    //     $newEmail = $_POST['email'];
+        // $newEmail = trim(htmlspecialchars($_POST['email'], ENT_QUOTES, 'UTF-8'));
 
     //     // Проверяем, совпадает ли роль текущего пользователя с обновленной ролью
     //     if ($newEmail == $_SESSION['user_email']) {
@@ -102,7 +103,7 @@ header("Location: $path");
     //         exit();
     //     }
     // }
-      $path='/'.APP_BASE_PATH.'/users';
+      $path='/users';
        header("Location: $path");
     }
 
@@ -111,7 +112,7 @@ header("Location: $path");
       $this->check->requirePermission(); 
       $userModel = new User();
        $userModel->delete($params['id']);
-       $path='/'.APP_BASE_PATH.'/users';
+       $path='/users';
         header("Location: $path");
     }
 }

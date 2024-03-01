@@ -1,14 +1,25 @@
+<?php
 
+// tt($_SESSION);
+$user_email = isset($_SESSION['user_email']) ? $_SESSION['user_email'] : 'NO NAME!!!';
+$user_role = isset($_SESSION['user_role']) ? $_SESSION['user_role'] : '';
+
+?>
 
 <!DOCTYPE html>
 <html>
 <head>
     <title><?= $title ?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/<?= APP_BASE_PATH ?>/app/css/style.css">
+    <link rel="stylesheet" href="/app/css/style.css">
     <script src="https://kit.fontawesome.com/1d9689321f.js" crossorigin="anonymous"></script>
+    <!-- flatpickr -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<!-- fullcalendar https://fullcalendar.io/ -->
+<script src="
+https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js
+"></script>
 </head>
 
 <body>
@@ -24,66 +35,72 @@ if(isset($_SESSION['user_name'])){ ?>
 
         <div class="sidebar col-md-3">
             <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="min-height: 900px;">
-                <a href="/<?=APP_BASE_PATH?>" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                     <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
                     <span class="fs-4">Mini CRM</span>
                 </a>
                 <hr>
                 <ul class="nav nav-pills flex-column mb-auto">
+
+<?php if($user_role == 5 || !ENABLE_PERMISSION_CHECK){ ?>
                     <li class="nav-item">
-                        <a href="/<?=APP_BASE_PATH?>" class="nav-link  <?=is_active('/'. APP_BASE_PATH )?>" aria-current="page">
-                        <svg class="bi me-2" width="16" height="16"><use xlink:href="/<?=APP_BASE_PATH?>"></use></svg>
+                        <a href="/" class="nav-link  <?=is_active('/')?>" aria-current="page">
+                        <svg class="bi me-2" width="16" height="16"><use xlink:href=""></use></svg>
                         Home
                         </a>
                     </li>
                     <li>
-                        <a href="/<?=APP_BASE_PATH?>/users" class="nav-link text-white <?=is_active('/'. APP_BASE_PATH .'/users') ?>">
+                        <a href="/users" class="nav-link text-white <?=is_active('/users') ?>">
                         <svg class="bi me-2" width="16" height="16">
-                            <use xlink:href="/<?=APP_BASE_PATH?>/users"></use></svg>
+                            <use xlink:href="/users"></use></svg>
                         Users
                         </a>
                     </li>
                     <li>
-                        <a href="/<?=APP_BASE_PATH?>/roles" class="nav-link text-white <?=is_active('/'. APP_BASE_PATH .'/roles') ?>" >
-                        <svg class="bi me-2" width="16" height="16"><use xlink:href="/<?=APP_BASE_PATH?>/roles"></use></svg>
+                        <a href="/roles" class="nav-link text-white <?=is_active('/roles') ?>" >
+                        <svg class="bi me-2" width="16" height="16"><use xlink:href="/roles"></use></svg>
                         Roles
                         </a>
                     </li>
                     <li>
-                        <a href="/<?=APP_BASE_PATH?>/pages" class="nav-link text-white <?=is_active('/'. APP_BASE_PATH .'/pages') ?>">
-                        <svg class="bi me-2" width="16" height="16"><use xlink:href="/<?=APP_BASE_PATH?>/pages"></use></svg>
+                        <a href="/pages" class="nav-link text-white <?=is_active('/pages') ?>">
+                        <svg class="bi me-2" width="16" height="16"><use xlink:href="/pages"></use></svg>
                         Pages
                         </a>
                     </li>
                     <hr>
+
+                    <?php } ?>
+
+
                     <h4>To do list</h4>
                     <li>
-                        <a href="/<?=APP_BASE_PATH?>/todo/tasks" class="nav-link text-white <?=is_active('/'. APP_BASE_PATH .'/todo/tasks') ?>" >
-                        <svg class="bi me-2" width="16" height="16"><use xlink:href="/<?=APP_BASE_PATH?>/todo/tasks"></use></svg>
+                        <a href="/todo/tasks" class="nav-link text-white <?=is_active('/todo/tasks') ?>" >
+                        <svg class="bi me-2" width="16" height="16"><use xlink:href="/todo/tasks"></use></svg>
                     Task(opened)
                         </a>
                     </li>
                     <li>
-                        <a href="/<?=APP_BASE_PATH?>/todo/tasks/completed" class="nav-link text-white <?=is_active('/'. APP_BASE_PATH .'/todo/tasks/completed') ?>" >
-                        <svg class="bi me-2" width="16" height="16"><use xlink:href="/<?=APP_BASE_PATH?>/todo/tasks/completed"></use></svg>
+                        <a href="/todo/tasks/completed" class="nav-link text-white <?=is_active('/todo/tasks/completed') ?>" >
+                        <svg class="bi me-2" width="16" height="16"><use xlink:href="/todo/tasks/completed"></use></svg>
                     Task(completed)
                         </a>
                     </li>
                     <li>
-                        <a href="/<?=APP_BASE_PATH?>/todo/tasks/expired" class="nav-link text-white <?=is_active('/'. APP_BASE_PATH .'/todo/tasks/expired') ?>" >
-                        <svg class="bi me-2" width="16" height="16"><use xlink:href="/<?=APP_BASE_PATH?>/todo/tasks/expired"></use></svg>
+                        <a href="/todo/tasks/expired" class="nav-link text-white <?=is_active('/todo/tasks/expired') ?>" >
+                        <svg class="bi me-2" width="16" height="16"><use xlink:href="/todo/tasks/expired"></use></svg>
                     Task(expired)
                         </a>
                     </li>
                     <li>
-                        <a href="/<?=APP_BASE_PATH?>/todo/tasks/create" class="nav-link text-white <?=is_active('/'. APP_BASE_PATH .'/todo/tasks/create') ?>" >
-                        <svg class="bi me-2" width="16" height="16"><use xlink:href="/<?=APP_BASE_PATH?>/todo/tasks/create"></use></svg>
+                        <a href="/todo/tasks/create" class="nav-link text-white <?=is_active('/todo/tasks/create') ?>" >
+                        <svg class="bi me-2" width="16" height="16"><use xlink:href="/todo/tasks/create"></use></svg>
                     Create Task
                         </a>
                     </li>
                     <li>
-                        <a href="/<?=APP_BASE_PATH?>/todo/category" class="nav-link text-white <?=is_active('/'. APP_BASE_PATH .'/todo/category') ?>" >
-                        <svg class="bi me-2" width="16" height="16"><use xlink:href="/<?=APP_BASE_PATH?>/todo/category"></use></svg>
+                        <a href="/todo/category" class="nav-link text-white <?=is_active('/todo/category') ?>" >
+                        <svg class="bi me-2" width="16" height="16"><use xlink:href="/todo/category"></use></svg>
                     Category
                         </a>
                     </li>
@@ -93,15 +110,15 @@ if(isset($_SESSION['user_name'])){ ?>
                 <div class="dropdown">
                 <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="https://avatars.githubusercontent.com/u/140085460?v=4" alt="" width="32" height="32" class="rounded-circle me-2">
-                    <strong>mdo</strong>
+                    <strong><?=$user_email?></strong>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1" style="">
                     <li><a class="dropdown-item" href="#">New project...</a></li>
                     <li><a class="dropdown-item" href="#">Settings</a></li>
                     <li><a class="dropdown-item" href="#">Profile</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="/<?=APP_BASE_PATH?>/auth/logout">Sign out</a></li>
-                    <li><a class="dropdown-item" href="/<?=APP_BASE_PATH?>/auth/login">Sign in</a></li>
+                    <li><a class="dropdown-item" href="/auth/logout">Sign out</a></li>
+                    <li><a class="dropdown-item" href="/auth/login">Sign in</a></li>
                 </ul>
                 </div>
             </div>
@@ -118,6 +135,6 @@ if(isset($_SESSION['user_name'])){ ?>
     <!-- Option 1: Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
-    <script src="/<?= APP_BASE_PATH ?>/app/js/mater.js" ></script>
+    <script src="/app/js/mater.js" ></script>
 </body>
 </html>

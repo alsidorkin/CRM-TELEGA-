@@ -5,7 +5,7 @@ ob_start();
 ?>
 <h1 class="mb-4">Edit Task</h1>
 
-<form action="/<?= APP_BASE_PATH ?>/todo/tasks/update" method="POST">
+<form action="/todo/tasks/update" method="POST">
 <input type="hidden" name="id" value="<?=$task['id']?>">
 
 <div class="row">
@@ -44,7 +44,7 @@ ob_start();
 <!-- Finish date field -->
 <div class="col-12 col-md-6 mb-3">
     <label for="finish_date">Finish_date</label>
-    <input type="datetime-local" class="form-control" id="finish_date" name="finish_date" value="<?=$task['finish_date'] !== null ? htmlspecialchars(str_replace('','T',$task['finish_date'])) : ''?>">
+    <input type="text" class="form-control" id="finish_date" name="finish_date" value="<?=$task['finish_date'] !== null ? htmlspecialchars(str_replace('','T',$task['finish_date'])) : ''?>">
      </div>
 </div>
 
@@ -159,6 +159,17 @@ ob_start();
             updateHiddenTags();
         });
     });
+
+    document.addEventListener("DOMContentLoaded", function(){
+    flatpickr("#finish_date" , {
+      enableTime: true,
+      noCalendar: false,
+      dateFormat:"Y-m-d H:00:00", // дата и время без минут и секунд
+      time_24hr: true,
+      minuteIncrement: 60 // Интервал времени 1 час
+    });
+  });
+
 
 </script>
 

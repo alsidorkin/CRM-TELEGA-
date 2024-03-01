@@ -35,7 +35,7 @@ h2.accordion-header{
 
 /* стилизация тегов на странице редактирования тегов */
 div.tags-container div.tag,
-.accordion-body p a.tag{
+.accordion-body p a.tag,.card-body p a.tag {
     display: inline-block;
     background-color: #020202;
     color: #f1f1f1;
@@ -67,11 +67,14 @@ padding-right: 10px;
 }
 
 
-.accordion-body p a.tag{
+.accordion-body p a.tag,
+.card-body p a.tag{
 text-decoration: none;
 
 }
-.accordion-body p a.tag:hover{
+
+.accordion-body p a.tag:hover,
+.card-body p a.tag:hover{
 
 background: #198754;
 }
@@ -99,3 +102,27 @@ background: #198754;
 .article .container h1 span{
     color: coral;
 }
+
+
+/* кастомизация календаря на главной */
+
+.fc-event:hover{
+    background-color: coral;
+    cursor: pointer;
+}
+
+/* #calendar{
+    width: 1300px;
+    padding-right : 0px;
+    overflow-x: auto;
+    margin-right: 20px;
+
+}
+
+.fc td {
+    --bs-gutter-x: 1.5rem !important;
+} */
+
+/* .fc-day{
+    text-align: center;
+} */

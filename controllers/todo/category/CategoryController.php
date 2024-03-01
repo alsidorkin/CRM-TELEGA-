@@ -18,7 +18,6 @@ class CategoryController{
        $this->check->requirePermission(); 
   $todoCategoryModel = new CategoryModel(); 
   $categories=$todoCategoryModel->getAllCategories();  
-  // Database::tte($roles);
   include 'app/views/todo/category/index.php';
     }
 
@@ -31,11 +30,9 @@ class CategoryController{
 
     public function store(){
        $this->check->requirePermission(); 
-      // Database::tte($_POST);
 if(isset($_POST['title'])&&isset($_POST['description'])){
-  // Database::tte($_POST);
-$title= trim($_POST['title']);
-$description= trim($_POST['description']);
+$title= trim(htmlspecialchars($_POST['title']));
+$description= trim(htmlspecialchars($_POST['description']));
 $user_id=isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0;
 
 if(empty($title)||empty($description)){
@@ -46,7 +43,7 @@ if(empty($title)||empty($description)){
 $todoCategoryModel = new CategoryModel();
 $todoCategoryModel->createCategory($title,$description,$user_id);
 }
-$path='/'.APP_BASE_PATH.'/todo/category';
+$path='/todo/category';
 header("Location: $path");
 }
     }
@@ -56,9 +53,21 @@ header("Location: $path");
        $this->check->requirePermission(); 
 
       $id=$params['id'];
+     
      $todoCategoryModel = new CategoryModel();
       $category=$todoCategoryModel->getCategoryById($id);
-      // Database::tte($role);
+      // tte( $category);
+      $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0;
+    
+      
+      // tte( $task);
+        if(!$category || $category['user'] !=$user_id){
+ 
+         http_response_code(404);
+         include 'app/views/errors/404.php';
+           return;
+        }
+
       if(!$category){
         echo 'category not found!!!';
         return;
@@ -76,8 +85,8 @@ header("Location: $path");
      if(isset($_POST['id'])&&isset($_POST['title'])&&isset($_POST['description'])){
 
 $id= trim($_POST['id']);
-$title= trim($_POST['title']);
-$description= trim($_POST['description']);
+$title= trim(htmlspecialchars($_POST['title']));
+$description= trim(htmlspecialchars($_POST['description']));
 $usability=isset($_POST['usability']) ? isset($_POST['usability']) : 0;
 if(empty($title)||empty($description)){
   echo "Title and description are required!!!";
@@ -87,7 +96,7 @@ if(empty($title)||empty($description)){
   $todoCategoryModel = new CategoryModel();
   $todoCategoryModel->updateCategory($id,$title,$description,$usability);
 }
-$path='/'.APP_BASE_PATH.'/todo/category';
+$path='/todo/category';
 header("Location: $path");
 }
     }
@@ -97,7 +106,7 @@ header("Location: $path");
       $this->check->requirePermission(); 
       $todoCategoryModel = new CategoryModel();
       $todoCategoryModel->deleteCategory($params['id']);
-      $path='/'.APP_BASE_PATH.'/todo/category';
+      $path='/todo/category';
        header("Location: $path");
     }
 

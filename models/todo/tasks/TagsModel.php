@@ -19,32 +19,6 @@ class TagsModel{
         }
     }
 
-// public function createTables(){
-// $todoTableQuery="CREATE TABLE IF NOT EXISTS `tags` (
-//     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-//     `user_id` INT,
-//     `name` VARCHAR(255) NOT NULL,
-//     FOREIGN KEY (user_id) REFERENCES users(id));
-
-//     CREATE TABLE IF NOT EXISTS `task_tags` (
-//     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-//     `task_id` INT NOT NULL,
-//     `tag_id` INT NOT NULL,
-//     FOREIGN KEY (task_id) REFERENCES todo_task(id),
-//     FOREIGN KEY (tag_id) REFERENCES tags(id)
-// )";
-
-
-// try{
-//    $this->db->exec($todoTableQuery);
-//     return true;
-//    }catch(\PDOException $e){
-//     return false;
-//    }
-
-// }
-
-
 
 public function createTables(){
     $todoTableQuery1 = "CREATE TABLE IF NOT EXISTS `tags` (
@@ -71,21 +45,6 @@ public function createTables(){
     }
 }
 
-
-
-
-// public function getAllTasks(){
-//     $query="SELECT * FROM  `todo_task`";
-//     try{
-//    $stmt=$this->db-> prepare( $query);
-//    $stmt->execute();
-//    $tasks=$stmt->fetchAll(\PDO::FETCH_ASSOC);
-// //    tte($tasks);
-//     return $tasks;
-// }catch(\PDOException $e){
-//     return false;
-//    };
-// }
 public function getTagsByTaskId($task_id){
     $query="SELECT tags.* FROM tags 
     JOIN task_tags ON tags.id = task_tags.tag_id
@@ -96,7 +55,7 @@ public function getTagsByTaskId($task_id){
         $stmt->execute([$task_id]);
         $tags=$stmt->fetchAll(\PDO::FETCH_ASSOC);
         // tte($tags);
-        return $tags ? $tags : '';
+        return $tags ? $tags : [];
        }catch(\PDOException $e){
         return false;
        }
@@ -181,53 +140,4 @@ function removeUnusedTag($tag_id){
        }
 }
 
-
-//     public function createTasks($data){
-//         $user_id=$data['user_id'];
-//         $title=$data['title'];
-//         $description=$data['description'];
-//         $category_id=$data['category_id'];
-//         $status=$data['status'];
-//         $priority=$data['priority'];
-//         $finish_date=$data['finish_date'];
-
-//         $query = "INSERT INTO todo_task (user_id,title,description,category_id,status,priority,
-//         finish_date) VALUES (?,?,?,?,?,?,?)";
-//         try{
-        
-//      $stmt=$this->db->prepare($query);
-//      $stmt->execute([$user_id,$title,$description,$category_id,$status,$priority,$finish_date]);
-//         return true;
-//     }catch(\PDOException $e){
-//         return false;
-//        }
-//     }
-
-
-//     public function updateCategory($id,$title,$description,$usability){
-//   $query="UPDATE `todo_category` SET `title` = ?, `description` = ? , `usability` = ? WHERE `id` = ? ";
-
-//   try{
-//     $stmt=$this->db->prepare($query);
-//     $stmt->execute([$title,$description,$usability,$id]);
-//     // Database::tte( $user);
-//     return true;
-//    }catch(\PDOException $e){
-//     return false;
-//    }
-//         }
-
-
-
-//         public function deleteCategory($id){
-//       $query= "DELETE FROM todo_category WHERE id = ?";
-
-//       try{
-//         $stmt=$this->db->prepare($query);
-//     $stmt->execute([$id]);
-//     return true;
-//    }catch(\PDOException $e){
-//     return false;
-//    }
-//       }
  }

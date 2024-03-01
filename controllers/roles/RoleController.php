@@ -32,8 +32,8 @@ class RoleController{
       // Database::tte($_POST);
 if(isset($_POST['role_name'])&&isset($_POST['role_description'])){
   // Database::tte($_POST);
-$role_name= trim($_POST['role_name']);
-$role_description= trim($_POST['role_description']);
+$role_name= trim(htmlspecialchars($_POST['role_name']));
+$role_description= trim(htmlspecialchars($_POST['role_description']));
 
 if(empty($role_name)){
   echo "Role name is required!!!";
@@ -44,7 +44,7 @@ $roleModel = new Role();
 // Database::tte($role_name.$role_description);
 $roleModel->createRole($role_name,$role_description);
 }
-$path='/'.APP_BASE_PATH.'/roles';
+$path='/roles';
 header("Location: $path");
 }
     }
@@ -70,8 +70,8 @@ header("Location: $path");
      if(isset($_POST['id'])&&isset($_POST['role_name'])&&isset($_POST['role_description'])){
 
 $id= trim($_POST['id']);
-$role_name= trim($_POST['role_name']);
-$role_description= trim($_POST['role_description']);
+$role_name= trim(htmlspecialchars($_POST['role_name']));
+$role_description= trim(htmlspecialchars($_POST['role_description']));
 
 if(empty($role_name)){
   echo "Role name is required!!!";
@@ -82,7 +82,7 @@ $roleModel = new Role();
 
 $roleModel->updateRole($id,$role_name,$role_description);
 }
-$path='/'.APP_BASE_PATH.'/roles';
+$path='/roles';
 header("Location: $path");
 }
     }
@@ -92,7 +92,7 @@ header("Location: $path");
       $this->check->requirePermission(); 
       $roleModel = new Role();
       $roleModel->deleteRole($params['id']);
-      $path='/'.APP_BASE_PATH.'/roles';
+      $path='/roles';
       header("Location: $path");
     }
 

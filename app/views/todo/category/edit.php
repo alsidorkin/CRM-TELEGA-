@@ -7,7 +7,7 @@ ob_start();
 <div class="col-lg-6 col-md-8 col-sm-10">
 <h1>Edit category</h1>
 
-<form action="/<?=APP_BASE_PATH?>/todo/category/update" method="post">
+<form action="/todo/category/update" method="post">
 <input type="hidden" name="id" value="<?=$category['id'];?>">
     <div class="mb-3">
         <label for="title" class="form-label">Title</label>

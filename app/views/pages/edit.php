@@ -2,13 +2,13 @@
  
 $title ='Update page';
 ob_start();
-tt($page);
+// tt($page);
 ?>
 <div class="row justify-content-center mt-5">
 <div class="col-lg-6 col-md-8 col-sm-10">
 <h1>Update Page</h1>
 
-<form action="/<?=APP_BASE_PATH?>/pages/update" method="post">
+<form action="/pages/update" method="post">
 <input type="hidden" name="id" value="<?=$page['id'];?>">
     <div class="mb-3">
         <label for="title" class="form-label">Title</label>

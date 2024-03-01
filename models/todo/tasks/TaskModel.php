@@ -36,7 +36,7 @@ $todoTableQuery="CREATE TABLE IF NOT EXISTS `todo_task` (
     `reminder_at` DATETIME,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (category_id) REFERENCES todo_category(id) ON DELETE SET NULL,
-    FOREIGN KEY (assigned_to) REFERENCES users(id) ON DELETE SET NULL
+    -- FOREIGN KEY (assigned_to) REFERENCES users(id) ON DELETE SET NULL
 )";
 
 
@@ -116,6 +116,18 @@ public function getTaskById($id){
         return false;
        }
 }
+public function getTaskByIdAndByIdUser($id_task, $id_user){
+    $query="SELECT * FROM todo_task WHERE id = ? AND user_id = ?";
+
+    try{
+        $stmt=$this->db->prepare($query);
+        $stmt->execute([$id_task, $id_user]);
+        $task= $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $task ? $task : [];
+       }catch(\PDOException $e){
+        return false;
+       }
+}
     public function createTasks($data){
         $user_id=$data['user_id'];
         $title=$data['title'];
@@ -152,7 +164,6 @@ public function getTaskById($id){
     $stmt=$this->db->prepare($query);
     $stmt->execute([$data['title'],$data['category_id'],$data['finish_date'],$data['status'],
     $data['priority'],$data['description'],$data['id']]);
-    // Database::tte( $user);
     return true;
    }catch(\PDOException $e){
     return false;

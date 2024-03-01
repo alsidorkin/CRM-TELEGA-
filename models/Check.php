@@ -13,9 +13,9 @@ class Check{
         $url="http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         $parsedUrl=parse_url($url);
         $path=$parsedUrl['path'];
-        $pathWithoutBase=str_replace(APP_BASE_PATH, '', $path);
+        // $pathWithoutBase=str_replace( '/', '', $path);
 
-        $segments=explode('/', ltrim($pathWithoutBase, '/'));
+        $segments=explode('/', ltrim($path, '/'));
         $firstTwoSegments=array_slice($segments, 0, 2);
         $slug=implode('/',$firstTwoSegments);
         return $slug;// обрезаем / вначале строки
@@ -38,9 +38,13 @@ class Check{
       }
   
 public function requirePermission(){
+
+  if (!ENABLE_PERMISSION_CHECK){
+    return;
+  }
     $slug=$this->getCurrentUrlSlug();
     if(!$this->checkPremission($slug)){
-        $path ='/'.APP_BASE_PATH;
+        $path ='/';
        header("Location: $path");
        exit();
     }

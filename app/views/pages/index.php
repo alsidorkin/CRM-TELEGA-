@@ -6,7 +6,7 @@ ob_start();
 <div class="row justify-content-center mt-5">
 <div class="col-lg-6 col-md-8 col-sm-10">
 <h1>Pages</h1>
-<a href="/<?=APP_BASE_PATH?>/pages/create" class="btn btn-success">Create Pages</a>
+<a href="/pages/create" class="btn btn-success">Create Pages</a>
 <table class="table">
 <thead>
     <tr>
@@ -25,8 +25,8 @@ ob_start();
             <td><?=$page['slug']?></td>
             <td><?=$page['role']?></td>
             <td>
-                <a href="/<?=APP_BASE_PATH?>/pages/edit/<?= $page['id']?>" class="btn btn-sm btn-outline-primary">Edit</a>
-            <form method="POST" action="/<?=APP_BASE_PATH?>/pages/delete/<?=$page['id']?>" class="d-inline-block">
+                <a href="/pages/edit/<?= $page['id']?>" class="btn btn-sm btn-outline-primary">Edit</a>
+            <form method="POST" action="/pages/delete/<?=$page['id']?>" class="d-inline-block">
         <button type="submit" class=" btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure?')">Delete</button>
         </form>
             </td>

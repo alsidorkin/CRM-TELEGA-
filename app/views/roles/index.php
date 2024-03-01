@@ -6,7 +6,7 @@ ob_start();
 <div class="row justify-content-center mt-5">
 <div class="col-lg-6 col-md-8 col-sm-10">
 <h1>Roles</h1>
-<a href="/<?=APP_BASE_PATH?>/roles/create" class="btn btn-success">Create role</a>
+<a href="/roles/create" class="btn btn-success">Create role</a>
 <table class="table">
 <thead>
     <tr>
@@ -23,8 +23,8 @@ ob_start();
             <td><?=$role['role_name']?></td>
             <td><?=$role['role_description']?></td>
             <td>
-                <a href="/<?=APP_BASE_PATH?>/roles/edit/<?= $role['id']?>" class="btn btn-sm btn-outline-primary">Edit</a>
-            <form method="POST" action="/<?=APP_BASE_PATH?>/roles/delete/<?= $role['id']?>" class="d-inline-block">
+                <a href="/roles/edit/<?= $role['id']?>" class="btn btn-sm btn-outline-primary">Edit</a>
+            <form method="POST" action="/roles/delete/<?= $role['id']?>" class="d-inline-block">
         <!-- <button type="submit" class=" btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure?')">Delete</button> -->
         </form>
             </td>

@@ -7,7 +7,7 @@ ob_start();
 <div class="col-lg-6 col-md-8 col-sm-10">
 <h1 class="text-center mb-4" >Register</h1>
 
-<form action="/<?=APP_BASE_PATH?>/auth/store" method="post">
+<form action="/users/store" method="post">
     <div class="mb-3">
         <label for="username">Username</label>
         <input type="text" class="form-control" id="username" name="username" required>
@@ -27,7 +27,8 @@ ob_start();
     <button type="submit" class="btn btn-primary">Register</button>
 </form>
 <div class="mt-4" >
-    <p>Alredy have an account?<a href="index.php?page=login">Login here</a></p>
+    <p>Alredy have an account?<a href="/auth/login">Login here</a></p>
+    <!-- <p>Alredy have an account?<a href="index.php?page=login"><? //=htmlspecialchars('Login here')?></a></p> -->
 </div>
 </div>
 </div>

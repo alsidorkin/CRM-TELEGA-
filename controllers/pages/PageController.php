@@ -33,10 +33,11 @@ public function __construct(){
        $this->check->requirePermission(); 
 
 if(isset($_POST['title'])&&isset($_POST['slug'])&&isset($_POST['roles'])){
-$title= trim($_POST['title']);
-$slug= trim($_POST['slug']);
-$roles=implode(',',$_POST['roles']);
+  $title = trim(htmlspecialchars($_POST['title']));
+  $slug = trim(htmlspecialchars($_POST['slug']));
+  $roles = filter_var_array($_POST['roles'], FILTER_SANITIZE_NUMBER_INT);
 
+  $roles = implode(",", $roles);
 if(empty($title)||empty($slug)||empty($roles)){
   echo "Title and slug or role fields are required!!!";
   return;
@@ -46,7 +47,7 @@ $pageModel = new PageModel();
 
 $pageModel->createPage($title,$slug,$roles);
 }
-$path ='/'.APP_BASE_PATH.'/pages';
+$path ='/pages';
 header("Location: $path");
 }
     }
@@ -70,32 +71,27 @@ header("Location: $path");
 
     public function update(){
        $this->check->requirePermission(); 
-      if(isset($_POST['role'])){
-          $newRole=$_POST['role'];
-        }
-  
-        if($this->check->isCurrentUserRole($newRole)){
-          $path='/'.APP_BASE_PATH.'/auth/logout';
-         header("Location: $path");
-         exit;
-        }
+     
   if(isset($_POST['id'])&&isset($_POST['title'])&&isset($_POST['slug'])&&isset($_POST['roles'])){
 //    Database::tte($_POST);
 $id= trim($_POST['id']);
-$title= trim($_POST['title']);
-$slug= trim($_POST['slug']);
 
-$role= implode(',',$_POST['roles']);
 
-if(empty($title)||empty($slug)||empty($role)){
+$title = trim(htmlspecialchars($_POST['title']));
+$slug = trim(htmlspecialchars($_POST['slug']));
+$roles = filter_var_array($_POST['roles'], FILTER_SANITIZE_NUMBER_INT);
+
+$roles = implode(",", $roles);
+
+if(empty($title)||empty($slug)||empty($roles)){
     echo "Title and slug or role fields are required!!!";
     return;
   }else{
 
     $pageModel = new PageModel();
-$pageModel->updatePage($id,$title,$slug,$role); 
+$pageModel->updatePage($id,$title,$slug,$roles); 
 }
-$path ='/'.APP_BASE_PATH.'/pages';
+$path ='/pages';
 header("Location: $path");
 }
     }
@@ -105,7 +101,7 @@ header("Location: $path");
       $this->check->requirePermission(); 
         $pageModel = new PageModel();
         $pageModel->deletePage($params['id']);
-        $path ='/'.APP_BASE_PATH.'/pages';
+        $path ='/pages';
         header("Location: $path");
     }
 

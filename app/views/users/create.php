@@ -4,7 +4,7 @@ ob_start();
 ?>
 <h1>Create user</h1>
 
-<form action="/<?=APP_BASE_PATH?>/users/store" method="post">
+<form action="/users/store" method="post">
     <div class="mb-3">
         <label for="username">Username</label>
         <input type="text" class="form-control" id="username" name="username" required>
