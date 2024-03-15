@@ -7,10 +7,12 @@ use models\users\User;
 use models\Check; 
 class UsersController{
   private $check;
+  private $userId;
 
   public function __construct(){
 
     $userRole=isset($_SESSION['user_role'] ) ? $_SESSION['user_role'] : null;
+    $this->userId=isset($_SESSION['user_id'] ) ? $_SESSION['user_id'] : null;
     $this->check=new Check($userRole); 
   }
     public function index(){
@@ -106,6 +108,72 @@ header("Location: $path");
       $path='/users';
        header("Location: $path");
     }
+
+
+    public function profile(){
+      $this->check->requirePermission(); 
+
+      $user_id=$this->userId;
+     
+      $userModel = new User();
+      $user=$userModel->read($user_id);
+      $role_id=$user['role'];
+      // tt($user);
+
+      $roleModel = new Role();
+      $role=$roleModel->getRoleById($role_id);
+
+     $otp=generationOTP();
+
+     $otpLastStr= $userModel->getLastOtpByUserId($user_id);
+      // tte($otpLastStr);
+
+    if($otpLastStr){
+      $otpCreated =new \DateTime($otpLastStr['created_at']);
+      $nowTime =new \DateTime();// текущая дата и время
+      $interval=$otpCreated->diff($nowTime);// разница между временем создания otp и текущим временем
+
+      $secondsDifference=$interval-> days * 24 * 60 * 60;
+      $secondsDifference+=$interval-> h* 60 * 60;
+      $secondsDifference+=$interval->i * 60;
+      $secondsDifference+=$interval->s;
+
+      // tte($secondsDifference);
+
+      if($secondsDifference > 3600){
+        $otp=generationOTP();
+        $visible=true;
+      }else{
+        $otp=$otpLastStr['otp'];
+        $visible=false;
+      }
+    }else{
+      $otp=generationOTP();
+        $visible=true;
+    }
+      include 'app/views/users/profile.php';
+    }
+
+    public function otpstore(){
+      $this->check->requirePermission(); 
+    //  tte($_POST);
+if(isset($_POST['otp'])&&isset($_POST['user_id'])){
+
+$otp= trim(htmlspecialchars($_POST['otp'])); 
+$user_id= trim(htmlspecialchars($_POST['user_id']));
+
+$userModel = new User();
+$data=[
+'otp'=>$otp,
+'user_id'=> $user_id,
+];
+
+$userModel->writeOTPCodeByUserId($data);
+}
+$path='/users/profile';
+header("Location: $path");
+}
+  
 
 
     public function delete($params){

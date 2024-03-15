@@ -57,7 +57,7 @@ public function getTagsByTaskId($task_id){
         // tte($tags);
         return $tags ? $tags : [];
        }catch(\PDOException $e){
-        return false;
+        return [];
        }
 }
 

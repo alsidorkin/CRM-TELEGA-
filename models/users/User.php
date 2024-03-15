@@ -51,9 +51,42 @@ $roleTableQuery="CREATE TABLE IF NOT EXISTS `roles` (
          FOREIGN KEY (`role`) REFERENCES `roles` (`id`)
         )";
 
+$otpTableQuery="CREATE TABLE IF NOT EXISTS `otp_codes` (
+    `id` INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT ,
+    `user_id` int(11) NOT NULL,
+    `otp` int(11) NOT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
+    FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+)";
+
+
+$userStatesQuery="CREATE TABLE IF NOT EXISTS `user_states` (
+    `id` INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT ,
+    `chat_id` int(11) NOT NULL,
+    `user_id` int(11) DEFAULT NULL,
+    `state` VARCHAR(233) NOT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+   UNIQUE INDEX(chat_id)
+)";
+
+
+$userTelegramQuery="CREATE TABLE IF NOT EXISTS `user_telegrams` (
+    `id` INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT ,
+    `user_id` int(11) NOT NULL,
+    `telegram_chat_id` VARCHAR(255) NOT NULL,
+    `telegram_username` VARCHAR(255) NOT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
+  FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)
+)";
+
+
 try{
    $this->db->exec($roleTableQuery);
    $this->db->exec($userTableQuery);
+   $this->db->exec($otpTableQuery);
+   $this->db->exec($userStatesQuery);
+   $this->db->exec($userTelegramQuery);
 
    // вставка записей в таблицу roles
 
@@ -127,7 +160,7 @@ $stmt=$this->db-> query("SELECT * FROM  `users`");
         return false;
        } 
     }
-    
+   
 
     public function update($id, $data){
 
@@ -165,7 +198,110 @@ $stmt=$this->db-> query("SELECT * FROM  `users`");
            }
     }
 
+    public function writeOTPCodeByUserId($data){
+        //    tte( $data); 
+            $otp=$data['otp'];
+            $user_id=$data['user_id'];
+            $created_at=date('Y-m-d H:i:s');
     
+           $query=" INSERT INTO otp_codes (otp,user_id,created_at) VALUES (?,?,?)";
+    
+          try{
+           
+            $stmt=$this->db->prepare($query);
+            
+             $stmt->execute([$otp ,$user_id,$created_at]);
+            //  Database::tte( $stmt);
+            return true;
+          }catch(\PDOException $e){
+            return false;
+           } 
+        }
+
+        
+        public function getLastOtpByUserId($id){
+            $query="SELECT * FROM otp_codes WHERE user_id = ? ORDER BY  created_at DESC LIMIT 1";
+        
+            try{
+                $stmt=$this->db->prepare($query);
+                $stmt->execute([$id]);
+                $role= $stmt->fetch(\PDO::FETCH_ASSOC);
+                return $role ? $role : false;
+               }catch(\PDOException $e){
+                return false;
+               }
+        }
+
+        // получение состояния пользователя для авторизации через телеграм
+        public function getUsersState($chatId){
+            $query="SELECT * FROM use_states WHERE chat_id = ? ";
+        
+            try{
+                $stmt=$this->db->prepare($query);
+                $stmt->execute([$chatId]);
+                $role= $stmt->fetch(\PDO::FETCH_ASSOC);
+                return $role ? $role : false;
+               }catch(\PDOException $e){
+                return false;
+               }
+        }
+
+// запись  состояния пользователя для авторизации через телеграм
+
+public function setUserState($chatId, $state, $userId= null){
+    //    tte( $data); 
+    $query = "INSERT INTO user_states (chat_id, state, user_id) VALUES (?, ?, ?)
+    ON DUPLICATE KEY UPDATE state = ?, user_id = ?";
+
+      try{
+       
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([$chatId, $state, $userId, $state, $userId]);
+    }catch (\PDOException $e) {
+        return false;
+    }
+    }
+    
+public function createUserTelegram($user_id, $chatId, $username){
+    //    tte( $data); 
+    $query = "INSERT INTO users_telegrams (chat_id, telegram_chat_id, telegram_user_name) VALUES (?, ?, ?)";
+
+      try{
+       
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([$user_id, $chatId, $username]);
+    }catch (\PDOException $e) {
+        return false;
+    }
+}
+    
+
+// Получение пользователя по email
+public function getUserByEmail($email) {
+    $query = "SELECT * FROM users WHERE email = ?";
+    try {
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([$email]);
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+    } catch (\PDOException $e) {
+        return false;
+    }
+}
+
+
+public function getOtpInfoByUserIdAndCode($user_id, $otpCode) {
+    $query = "SELECT * FROM otp_codes WHERE user_id = ? AND otp_code =? AND
+     created_at >= DATE_SUB(NOW(),INTERVAL 60 MINUTE)";
+    try {
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([$user_id, $otpCode]);
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+    } catch (\PDOException $e) {
+        return false;
+    }
+}
+
+
     public function delete($id){
 
         $query="DELETE FROM users WHERE id = ?";
@@ -178,5 +314,6 @@ $stmt=$this->db-> query("SELECT * FROM  `users`");
                 return false;
                }        
     }
+
     
 }

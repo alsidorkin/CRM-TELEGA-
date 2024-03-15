@@ -66,6 +66,7 @@ public function getAllCategoriesWithUsability(){
         return false;
     }
 }
+
 public function getCategoryById($id){
     $query="SELECT * FROM todo_category WHERE id = ?";
 

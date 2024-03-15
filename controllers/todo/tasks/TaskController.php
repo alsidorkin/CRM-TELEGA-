@@ -282,7 +282,7 @@ public function updateStatus($params){
   $this->check->requirePermission(); 
   
 $datetime=null;
-$status= TRIM(htmlspecialchars($_POST['status']));
+$status= trim(htmlspecialchars($_POST['status']));
 
 $id=$params['id'];
 

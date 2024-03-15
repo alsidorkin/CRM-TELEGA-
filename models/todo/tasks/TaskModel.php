@@ -32,10 +32,10 @@ $todoTableQuery="CREATE TABLE IF NOT EXISTS `todo_task` (
     `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
     `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `finish_date` DATETIME,
-    `copleted_at` DATETIME,
+    `completed_at` DATETIME,
     `reminder_at` DATETIME,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (category_id) REFERENCES todo_category(id) ON DELETE SET NULL,
+    FOREIGN KEY (category_id) REFERENCES todo_category(id) ON DELETE SET NULL
     -- FOREIGN KEY (assigned_to) REFERENCES users(id) ON DELETE SET NULL
 )";
 
@@ -177,9 +177,9 @@ public function getTaskByIdAndByIdUser($id_task, $id_user){
     
             try{
                 if($datetime !== null){
-                    $query .= ", copleted_at = :copleted_at";
+                    $query .= ", completed_at = :completed_at";
                 }else{
-                    $query .= ", copleted_at = NULL";
+                    $query .= ", completed_at = NULL";
                 }
     
                 $query .= " WHERE id = :id";
@@ -189,7 +189,7 @@ public function getTaskByIdAndByIdUser($id_task, $id_user){
                 $params = [':status' => $status, ':id' => $id];
     
                 if($datetime !== null){
-                    $params[':copleted_at'] = $datetime;
+                    $params[':completed_at'] = $datetime;
                 }
     
                 $stmt->execute($params);

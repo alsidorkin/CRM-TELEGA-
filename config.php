@@ -24,6 +24,7 @@ define('DB_PASS' , '');
 define('DB_NAME' , 'crm_for_telega');
 
 define('ENABLE_PERMISSION_CHECK', true); // Установка значение в false, чтобы отключить проверки разрешений в контроллерах
+define('TELEGRAM_BOT_API_KEY', '7023271445:AAHznQlbbbNFwB9Dl4x5Jnf9IvewXot77Kk'); 
 
 // const START_ROLE= 1;
 

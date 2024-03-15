@@ -26,12 +26,12 @@ https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js
 <div class="container">
     <div class="row">
 
-<div> <?php
-if(isset($_SESSION['user_name'])){ ?>
-<h3>Добро пожаловать <?=$_SESSION['user_name']?>!!!</h3>
-<?php }else{?>
-    <h3>Добро пожаловать <?='No user'?>!!!</h3>
-<?php }?></div>
+<!-- <div> <?php
+//if(isset($_SESSION['user_name'])){ ?>
+<h3>Добро пожаловать <? //=$_SESSION['user_name']?>!!!</h3>
+<?php // }else{?>
+    <h3>Добро пожаловать <? //='No user'?>!!!</h3>
+<?php //}?></div> -->
 
         <div class="sidebar col-md-3">
             <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="min-height: 900px;">
@@ -113,9 +113,9 @@ if(isset($_SESSION['user_name'])){ ?>
                     <strong><?=$user_email?></strong>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1" style="">
-                    <li><a class="dropdown-item" href="#">New project...</a></li>
-                    <li><a class="dropdown-item" href="#">Settings</a></li>
-                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                    <!-- <li><a class="dropdown-item" href="#">New project...</a></li>
+                    <li><a class="dropdown-item" href="#">Settings</a></li> -->
+                    <li><a class="dropdown-item" href="/users/profile">Profile</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="/auth/logout">Sign out</a></li>
                     <li><a class="dropdown-item" href="/auth/login">Sign in</a></li>
