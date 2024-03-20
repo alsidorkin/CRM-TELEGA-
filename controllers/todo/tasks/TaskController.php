@@ -60,7 +60,6 @@ class TaskController{
           $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0;
             $todoTaskModel = new TaskModel(); 
             $expiredTasks=$todoTaskModel->getAllExpiredTasksByIdUser( $user_id);   
-
             $categoryModel = new CategoryModel();
 
             // получение списка тегов для каждой записи в массиве 

@@ -54,7 +54,7 @@ $roleTableQuery="CREATE TABLE IF NOT EXISTS `roles` (
 $otpTableQuery="CREATE TABLE IF NOT EXISTS `otp_codes` (
     `id` INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT ,
     `user_id` int(11) NOT NULL,
-    `otp` int(11) NOT NULL,
+    `otp_code` int(11) NOT NULL,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
     FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 )";
@@ -200,11 +200,11 @@ $stmt=$this->db-> query("SELECT * FROM  `users`");
 
     public function writeOTPCodeByUserId($data){
         //    tte( $data); 
-            $otp=$data['otp'];
+            $otp=$data['otp_code'];
             $user_id=$data['user_id'];
             $created_at=date('Y-m-d H:i:s');
     
-           $query=" INSERT INTO otp_codes (otp,user_id,created_at) VALUES (?,?,?)";
+           $query=" INSERT INTO otp_codes (otp_code,user_id,created_at) VALUES (?,?,?)";
     
           try{
            
@@ -261,15 +261,15 @@ public function setUserState($chatId, $state, $userId= null){
         return false;
     }
     }
-    
+    // создание пользователя Телеграм + miniCRM
 public function createUserTelegram($user_id, $chatId, $username){
     //    tte( $data); 
-    $query = "INSERT INTO users_telegrams (chat_id, telegram_chat_id, telegram_user_name) VALUES (?, ?, ?)";
+    $query = "INSERT INTO user_telegrams (user_id, telegram_chat_id, telegram_username) VALUES (?, ?, ?)";
 
       try{
        
         $stmt = $this->db->prepare($query);
-        $stmt->execute([$user_id, $chatId, $username]);
+        return $stmt->execute([$user_id, $chatId, $username]);
     }catch (\PDOException $e) {
         return false;
     }
@@ -288,7 +288,7 @@ public function getUserByEmail($email) {
     }
 }
 
-
+// получение информации о пользователе по его ID и введенному в телеграм ОТП паролю
 public function getOtpInfoByUserIdAndCode($user_id, $otpCode) {
     $query = "SELECT * FROM otp_codes WHERE user_id = ? AND otp_code =? AND
      created_at >= DATE_SUB(NOW(),INTERVAL 60 MINUTE)";

@@ -1,7 +1,8 @@
 <?php 
-namespace models;
+namespace models\telegram;
 
 use models\users\User;
+use models\telegram\CommandHandler;
 
 class TelegramBot{
 
@@ -54,7 +55,7 @@ $text = $message['text'];
 $username = $message['from']['username'];
 
 $userModel = new User();
-
+$commandHandler = new CommandHandler();
 // tte($text);
 
 try{
@@ -67,24 +68,24 @@ try{
 switch ($text) {
     // Если команда /start, вызываем обработчик handleStartCommand и устанавливаем состояние пользователя на 'email'
     case '/start':
-        $response = $this->handleStartCommand($chatId);
+        $response = $commandHandler->handleStartCommand($chatId);
         $userModel->setUserState($chatId, 'start'); 
         break;
     // Если команда /email, вызываем обработчик handleEmailCommand и устанавливаем состояние пользователя на 'email'
     case '/email':
-        $response = $this->handleEmailCommand($chatId);
+        $response = $commandHandler->handleEmailCommand($chatId);
         $userModel->setUserState($chatId, 'email');
         break;
     // Если команда /help, вызываем обработчик handleHelpCommand
     case '/help':
-        $response = $this->handleHelpCommand($chatId);
+        $response = $commandHandler->handleHelpCommand($chatId);
         break;
     // Если другая команда или текстовое сообщение, вызываем обработчик handleMessage с передачей параметров
     default:
         $response = $this->handleMessage($text, $currentState, $chatId, $userModel, $user_id, $username);
    }
 } catch(\Exception $e){
-error_log("Error: " . $e->getMessage() . "\n", 3, 'logs/error.log');
+error_log("Error: " . $e->getMessage() . "\n", 3, 'logs/error.log'); 
 $response = 'Произошла ошибка. Пожалуйста, попробуйте еще раз.';
 }
 
@@ -121,28 +122,5 @@ if ($otpInfo) {
 $response = 'Я не понимаю вашу команду. ' . $currentState;
 }
 return $response;
-}
-
-
-// Ниже методы, которые отвечают за обработку команд c телеграма
-private function handleHelpCommand($chatId) 
-{
-return "Список команд:\n/start - начать работу\n/email - ввести email\n/help - вывести справку";
-}
-
-
-
-private function handleEmailCommand($chatId) 
-{
-return "Введите email с вашего аккаунта miniCRM...";
-}
-
-private function handleStartCommand($chatId) 
-{
-return "Чтобы иметь возможность пользоваться нашим ботом, вам необходимо провести привязку аккаунта
- телеграм и аккаунта в miniCRM. Для инструкции перейдите по адресу https://crm.abxz.fun, 
- авторизуйтесь в системе и перейдите в ваш профайл...";
-}
-
-// еще какие-то методы
+  }
 }

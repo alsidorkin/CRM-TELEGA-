@@ -144,7 +144,7 @@ header("Location: $path");
         $otp=generationOTP();
         $visible=true;
       }else{
-        $otp=$otpLastStr['otp'];
+        $otp=$otpLastStr['otp_code'];
         $visible=false;
       }
     }else{
@@ -164,7 +164,7 @@ $user_id= trim(htmlspecialchars($_POST['user_id']));
 
 $userModel = new User();
 $data=[
-'otp'=>$otp,
+'otp_code'=>$otp,
 'user_id'=> $user_id,
 ];
 
