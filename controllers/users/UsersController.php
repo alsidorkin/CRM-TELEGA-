@@ -31,7 +31,7 @@ class UsersController{
 
 
     public function store(){
-      // $this->check->requirePermission(); 
+       $this->check->requirePermission(); 
     // tte($_POST);
 if(isset($_POST['username'])&&isset($_POST['password'])
  &&isset($_POST['confirm_password'])&&isset($_POST['email'])){
@@ -127,6 +127,7 @@ header("Location: $path");
 
      $otpLastStr= $userModel->getLastOtpByUserId($user_id);
       // tte($otpLastStr);
+   $isUserTelegram=  $userModel->getInfoByUserIdFromTelegramTable($user_id);
 
     if($otpLastStr){
       $otpCreated =new \DateTime($otpLastStr['created_at']);

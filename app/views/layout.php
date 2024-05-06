@@ -9,6 +9,7 @@ $user_role = isset($_SESSION['user_role']) ? $_SESSION['user_role'] : '';
 <!DOCTYPE html>
 <html>
 <head>
+<!-- <meta charset="UTF-8"> -->
     <title><?= $title ?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="/app/css/style.css">

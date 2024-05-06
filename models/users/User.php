@@ -142,11 +142,6 @@ $stmt=$this->db-> query("SELECT * FROM  `users`");
 //    tte($_POST['password'].' :'.$password);
 
        $query=" INSERT INTO users (username,email,password,role,created_at) VALUES (?,?,?,?,?)";
-      
-    // $query = "INSERT INTO users (username, email, password, role, created_at) 
-    // VALUES ('$username', '$email', '$password', '$role', '$created_at')";
-    // $this->db->exec($query);
-
 
       try{
        
@@ -181,9 +176,6 @@ $stmt=$this->db-> query("SELECT * FROM  `users`");
     return false;
    }
         }
-
-//   Database::tte("username: ". $username."  admin: ".$admin."  role: ".$role.
-//   "  email: ".$email."  is_active: ".$is_active);
 
     public function read($id){
         $query="SELECT * FROM users WHERE id = ?";
@@ -234,7 +226,7 @@ $stmt=$this->db-> query("SELECT * FROM  `users`");
 
         // получение состояния пользователя для авторизации через телеграм
         public function getUsersState($chatId){
-            $query="SELECT * FROM use_states WHERE chat_id = ? ";
+            $query="SELECT * FROM user_states WHERE chat_id = ? ";
         
             try{
                 $stmt=$this->db->prepare($query);
@@ -301,6 +293,34 @@ public function getOtpInfoByUserIdAndCode($user_id, $otpCode) {
     }
 }
 
+
+// Получить информацию о пользователе с таблицы "user_telegrams" по user_id
+public function getInfoByUserIdFromTelegramTable($user_id){
+    $query = "SELECT * FROM user_telegrams WHERE user_id = ?";
+
+    try {
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([$user_id]);
+        $res = $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $res;
+    } catch (\PDOException $e) {
+        return false;
+    }
+ }
+
+ // Получить информацию о пользователе с таблицы "user_telegrams" по telegram_chat_id
+ public function getUserByTelegramChatId($telegram_chat_id){
+    $query = "SELECT * FROM user_telegrams WHERE telegram_chat_id = ?";
+
+    try {
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([$telegram_chat_id]);
+        $res = $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $res;
+    } catch (\PDOException $e) {
+        return false;
+    }
+ }
 
     public function delete($id){
 

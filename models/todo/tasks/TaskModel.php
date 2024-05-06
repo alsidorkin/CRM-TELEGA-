@@ -38,12 +38,25 @@ $todoTableQuery="CREATE TABLE IF NOT EXISTS `todo_task` (
     FOREIGN KEY (category_id) REFERENCES todo_category(id) ON DELETE SET NULL
     -- FOREIGN KEY (assigned_to) REFERENCES users(id) ON DELETE SET NULL
 )";
+$remindersTable="CREATE TABLE IF NOT EXISTS `todo_reminders` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `user_id` INT(11) NOT NULL,
+    `task_id` INT(11) NOT NULL,
+    `reminder_at` DATETIME,
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (task_id) REFERENCES todo_task(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    -- FOREIGN KEY (assigned_to) REFERENCES users(id) ON DELETE SET NULL
+)";
 
 
 try{
    $this->db->exec($todoTableQuery);
+   $this->db->exec($remindersTable);
+ 
     return true;
    }catch(\PDOException $e){
+    echo "Ошибка при создании таблицы: " . $e->getMessage();
     return false;
    }
 
@@ -136,13 +149,14 @@ public function getTaskByIdAndByIdUser($id_task, $id_user){
         $status=$data['status'];
         $priority=$data['priority'];
         $finish_date=$data['finish_date'];
+        $reminder_at = $data['reminder_at'];
 
         $query = "INSERT INTO todo_task (user_id,title,description,category_id,status,priority,
-        finish_date) VALUES (?,?,?,?,?,?,?)";
+        finish_date,reminder_at) VALUES (?,?,?,?,?,?,?,?)";
         try{
         
      $stmt=$this->db->prepare($query);
-     $stmt->execute([$user_id,$title,$description,$category_id,$status,$priority,$finish_date]);
+     $stmt->execute([$user_id,$title,$description,$category_id,$status,$priority,$finish_date, $reminder_at]);
         return true;
     }catch(\PDOException $e){
         return false;
@@ -158,12 +172,12 @@ public function getTaskByIdAndByIdUser($id_task, $id_user){
     public function updateTask($data){
         // tte($data);
   $query="UPDATE `todo_task` SET `title` = ?,`category_id` = ?,`finish_date` = ?,`status` = ?,
-  `priority` = ?, `description` = ?  WHERE `id` = ? ";
+  `priority` = ?, `description` = ?, `reminder_at`=?  WHERE `id` = ? ";
 
   try{
     $stmt=$this->db->prepare($query);
     $stmt->execute([$data['title'],$data['category_id'],$data['finish_date'],$data['status'],
-    $data['priority'],$data['description'],$data['id']]);
+    $data['priority'],$data['description'],$data['reminder_at'],$data['id']]);
     return true;
    }catch(\PDOException $e){
     return false;
@@ -233,4 +247,25 @@ public function getTaskByIdAndByIdUser($id_task, $id_user){
     return false;
    }
       }
+
+      public function getTasksCountAndStatusByUserId($user_id){
+        $query="SELECT 
+        COUNT(*) AS all_tasks,
+        SUM(status='completed') AS completed,
+        SUM(status!='completed' AND finish_date < NOW() OR status !='completed' AND finish_date IS NULL) AS expired,
+        SUM(status!='completed' AND finish_date > NOW() OR status !='completed' AND finish_date IS NULL) AS opened
+        FROM 
+        todo_task
+           WHERE user_id= :user_id ";
+    
+        try{
+            $stmt=$this->db->prepare($query);
+            $stmt->execute([$user_id]);
+            $task= $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            return $task ? $task : [];
+           }catch(\PDOException $e){
+            return [];
+           }
+    }
+
  }

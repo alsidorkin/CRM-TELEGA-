@@ -20,6 +20,7 @@ public function sendTelegramMessage($chatId, $text){
     // формирование данных для POST запроса
     $postData =[
         'chat_id' => $chatId,
+        'parse_mode'=>'HTML',
         'text' => $text
     ];
 
@@ -72,13 +73,16 @@ switch ($text) {
         $userModel->setUserState($chatId, 'start'); 
         break;
     // Если команда /email, вызываем обработчик handleEmailCommand и устанавливаем состояние пользователя на 'email'
-    case '/email':
+    case '/addaccount':
         $response = $commandHandler->handleEmailCommand($chatId);
         $userModel->setUserState($chatId, 'email');
         break;
     // Если команда /help, вызываем обработчик handleHelpCommand
     case '/help':
         $response = $commandHandler->handleHelpCommand($chatId);
+        break;
+    case '/task':
+        $response = $commandHandler->handleTaskCommand($chatId);
         break;
     // Если другая команда или текстовое сообщение, вызываем обработчик handleMessage с передачей параметров
     default:
